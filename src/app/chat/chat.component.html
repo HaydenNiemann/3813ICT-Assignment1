@@ -1,7 +1,7 @@
 <div class="chat-container">
   <h2>Welcome, {{ username }}</h2>
 
-  <!-- Chat Form -->
+  
   <form (ngSubmit)="sendMessage()" class="chat-form">
     <div class="form-group">
       <label for="messagecontent">New Message</label>
@@ -17,30 +17,30 @@
     <button type="submit" class="btn btn-primary">Send</button>
   </form>
 
-  <!-- Messages List -->
+  
   <ul class="messages-list">
     <li *ngFor="let message of messages" class="message-item">{{ message }}</li>
   </ul>
 
-  <!-- Super Admin Section -->
+  
   <div *ngIf="userRole === 'SuperAdmin'">
     <h3>Super Admin Actions</h3>
     <button class="btn btn-primary">Manage Users</button>
-    <!-- Add more Super Admin features here -->
+    
   </div>
 
-  <!-- Group Admin Section -->
+  
   <div *ngIf="userRole === 'GroupAdmin'">
     <h3>Group Admin Actions</h3>
     <button class="btn btn-primary">Create Group</button>
-    <!-- Add more Group Admin features here -->
+   
   </div>
 
-  <!-- Regular User Section -->
+  
   <div *ngIf="userRole === 'User'">
     <h3>User Actions</h3>
     <button class="btn btn-primary">Join Channel</button>
-    <!-- Add more User features here -->
+    
   </div>
 
   <!-- Logout Button -->

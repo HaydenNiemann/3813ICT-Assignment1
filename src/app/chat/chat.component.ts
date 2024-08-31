@@ -42,6 +42,6 @@ export class ChatComponent implements OnInit {
 
   logout(): void {
     sessionStorage.removeItem('currentUser');
-    this.router.navigate(['/login']); // Redirect to login page
+    this.router.navigate(['/login']);
   }
 }
