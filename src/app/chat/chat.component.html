@@ -1,0 +1,21 @@
+<div class="container">
+    <form (ngSubmit)="sendMessage()">
+      <div class="form-group">
+        <label for="messagecontent">New Message</label>
+        <input
+          type="text"
+          [(ngModel)]="messagecontent"
+          name="messagecontent"
+          id="messagecontent"
+          class="form-control"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+  
+    <ul>
+      <li *ngFor="let message of messages">{{ message }}</li>
+    </ul>
+  </div>
+  
