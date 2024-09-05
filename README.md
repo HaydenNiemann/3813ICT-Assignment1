@@ -59,3 +59,36 @@ The application follows a modular Angular architecture with components, services
 ### Routes:
 - **`/login`**: User login and registration.
 - **`/chat`**: Chat interface for interacting with other users.
+
+
+## Node Server Architecture
+
+The Node.js server architecture is structured to handle various tasks, divided across various files and functions.
+
+### Modules:
+- **`express`**: Handles server requests and routing.
+- **`socket.io`**: Manages real-time, bi-directional communication.
+- **`cors`**: Enables cross-origin requests between the client and server.
+- **`http`**: Provides core HTTP functionalities to manage requests and responses.
+- **`fs`**: Handles file system operations such as reading and writing files.
+- **`sockethandler`**: Custom module to import sockets.js to manage Socket.io events for real time chat.
+
+### Functions:
+
+#### **server.js**:
+- **`loadData()`**: Loads saved channel messages from `data.json` if the file exists.
+- **`socketHandler.connect()`**: Connects Socket.io with the server, passing in `io` and `channelMessages`.
+
+#### **sockets.js**:
+- **`saveData()`**: Saves updated channel messages to `data.json`.
+- **`joinChannel()`**: Allows users to join a channel and sends chat history.
+- **`sendMessage()`**: Sends a message to the channel and broadcasts it to other users.
+- **`deleteChannel()`**: Deletes a channel and its messages from the data store.
+
+### Files:
+- **`server.js`**: Initializes the server, loads data, and connects Socket.io.
+- **`sockets.js`**: Handles all Socket.io events for real-time chat.
+
+### Global Variables:
+- **`channelMessages`**: Stores channel-specific messages across the app.
+
