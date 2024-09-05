@@ -94,7 +94,7 @@ The Node.js server architecture is structured to handle various tasks, divided a
 
 
 
-## Server-Side Routes
+## Server Side Routes
 
 ### **`GET /`**
 - **Purpose**: Serves the main application or index page.
@@ -156,3 +156,99 @@ The Node.js server architecture is structured to handle various tasks, divided a
   - `channelName` (string): The name of the channel to be deleted.
 - **Return Values**:
   - Result: Notifies users that the channel has been deleted.
+
+
+
+  # Client Server Interaction and Angular Component Updates
+
+This section outlines the interaction between the client and server in the chat application, detailing how data on the server side changes and how each Angular component page updates.
+
+## Interaction Between Client and Server
+
+### 1. Joining a Channel
+
+- **Client Request:**
+  - When a user selects a channel and clicks "Join Channel," the `joinChannel` event is emitted from the client with the following data:
+    - `channelName` (string): The name of the channel to join.
+
+- **Server Response:**
+  - **Server Action:**
+    - The server adds the user to the specified channel using `socket.join(channelName)`.
+    - Retrieves the last 5 messages from the server-side `channelMessages` object, sorts them by timestamp, and emits them to the client via `chatHistory`.
+    - Updates the server-side channel data and saves it in `data.json`.
+
+  - **Client Update:**
+    - The chat display updates to show messages from the joined channel by receiving the sorted `chatHistory` from the server.
+    - The list of available channels is updated and the current channel is highlighted, showing which channel the user has joined.
+
+### 2. Sending a Message
+
+- **Client Request:**
+  - When a user sends a message in the selected channel, the `sendMessage` event is emitted from the client with the following data:
+    - `channelName` (string): The name of the channel where the message will be sent.
+    - `message` (string): The content of the message.
+    - `user` (string): The name of the user sending the message.
+
+- **Server Response:**
+  - **Server Action:**
+    - The server adds the new message to the `channelMessages` list for the specified channel.
+    - Broadcasts the new message to all users in the channel using `io.to(channelName).emit('newMessage', newMessage)`.
+    - Updates and saves the messages in the `data.json` file for persistence.
+
+  - **Client Update:**
+    - The new message is appended to the chat display for all users currently in the channel. The chat area is updated in real time as new messages come in.
+    - The message list ensures that the most recent message is visible at the top.
+
+### 3. Deleting a Channel
+
+- **Client Request:**
+  - When an admin user deletes a channel, the `deleteChannel` event is emitted from the client with:
+    - `channelName` (string): The name of the channel to be deleted.
+
+- **Server Response:**
+  - **Server Action:**
+    - The server removes the specified channel from the `channelMessages` object and deletes its messages.
+    - The updated channel data is saved to `data.json` to ensure persistence.
+    - Notifies all users in the channel that the channel has been deleted.
+
+  - **Client Update:**
+    - The channel is removed from the list of available channels on the sidebar.
+    - If the deleted channel was active, the chat display is cleared, and users are redirected to another available channel or a default page.
+
+---
+
+## Angular Component Updates
+
+### 1. Chat Component (`chat.component.html` and `chat.component.ts`)
+
+#### **Initial Load:**
+- **Client Action:**
+  - When the chat component is initialized, it fetches the list of available channels and messages from local storage or the server.
+  
+- **Display Update:**
+  - The channel list is rendered in the sidebar (`*ngFor` is used to loop through available channels).
+  - The chat area remains empty until the user selects a channel.
+
+#### **Joining a Channel:**
+- **Client Action:**
+  - When the user selects a channel, the client sends a `joinChannel` request to the server.
+  
+- **Display Update:**
+  - The chat display is updated to show the most recent 5 messages from the joined channel. The selected channel is highlighted in the sidebar.
+  - The chat history is dynamically updated using the server’s `chatHistory` response, which is processed by `getChatHistory()` in `chat.component.ts`.
+
+#### **Sending a Message:**
+- **Client Action:**
+  - When the user submits a message, the `sendMessage()` method emits the `sendMessage` event to the server.
+  
+- **Display Update:**
+  - The new message is immediately added to the chat display without requiring a page refresh. All clients in the channel see the message in real time, handled by `getMessages()`.
+
+#### **Deleting a Channel:**
+- **Client Action:**
+  - When an admin deletes a channel, the `removeChannel()` method emits a `deleteChannel` event to the server.
+  
+- **Display Update:**
+  - The deleted channel is removed from the list in the sidebar, and the chat area is cleared if the deleted channel was the active one.
+  - Other users who had the channel open will also see it removed, and the client ensures the user is redirected appropriately.
+
