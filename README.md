@@ -159,11 +159,10 @@ The Node.js server architecture is structured to handle various tasks, divided a
 
 
 
-# Client Server Interaction and Angular Component Updates
+## Client Server Interaction and Angular Component Updates
 
 This section outlines the interaction between the client and server in the chat application, detailing how data on the server side changes and how each Angular component page updates.
 
-## Interaction Between Client and Server
 
 ### 1. Joining a Channel
 
