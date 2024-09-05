@@ -1,4 +1,4 @@
-## Git Repository Organization and Usage
+# Git Repository Organization and Usage
 
 The Git repository for this project is organized to ensure a clear separation of concerns and smooth collaboration. The repository is structured as follows:
 
@@ -15,7 +15,7 @@ The Git repository for this project is organized to ensure a clear separation of
   - **Backend (Node.js)**:
     - The backend server code is organized under the `server/` directory, with separate files for different aspects of the server such as `server.js` for initializing the server, `sockets.js` for handling Socket.io events, and various route handlers.
 
-## Data Structures
+# Data Structures
 
 The system uses several core data structures to manage users, groups, and channels.
 
@@ -40,7 +40,7 @@ Represents a communication channel within a group.
 - **`name`**: Name of the channel.
 - **`users`**: Array of users in the channel.
 
-## Angular Architecture
+# Angular Architecture
 
 The application follows a modular Angular architecture with components, services, models, and routes which helps maintainability.
 
@@ -61,7 +61,7 @@ The application follows a modular Angular architecture with components, services
 - **`/chat`**: Chat interface for interacting with other users.
 
 
-## Node Server Architecture
+# Node Server Architecture
 
 The Node.js server architecture is structured to handle various tasks, divided across various files and functions.
 
@@ -94,7 +94,7 @@ The Node.js server architecture is structured to handle various tasks, divided a
 
 
 
-## Server Side Routes
+# Server Side Routes
 
 ### **`GET /`**
 - **Purpose**: Serves the main application or index page.
@@ -159,7 +159,7 @@ The Node.js server architecture is structured to handle various tasks, divided a
 
 
 
-## Client Server Interaction and Angular Component Updates
+# Client Server Interaction and Angular Component Updates
 
 This section outlines the interaction between the client and server in the chat application, detailing how data on the server side changes and how each Angular component page updates.
 
