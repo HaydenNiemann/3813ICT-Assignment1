@@ -39,3 +39,23 @@ Represents a communication channel within a group.
 
 - **`name`**: Name of the channel.
 - **`users`**: Array of users in the channel.
+
+## Angular Architecture
+
+The application follows a modular Angular architecture with components, services, models, and routes which helps maintainability.
+
+### Components:
+- **`ChatComponent`**: Manages chat functionality, including creating/joining channels and sending messages.
+- **`LoginComponent`**: Handles user login and registration processes.
+
+### Services:
+- **`SocketService`**: Manages real-time communication between the front end and the server using Socket.io.
+
+### Models:
+- **`User`**: Defines user structure, including username, role, and groups.
+- **`Group`**: Defines group structure with ID, name, channels, and users.
+- **`Channel`**: Defines channel structure with name and users.
+
+### Routes:
+- **`/login`**: User login and registration.
+- **`/chat`**: Chat interface for interacting with other users.
