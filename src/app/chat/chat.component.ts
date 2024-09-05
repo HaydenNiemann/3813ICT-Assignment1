@@ -104,7 +104,6 @@ export class ChatComponent implements OnInit {
     }
   }
   
-  
   sendMessage(): void {
     if (this.messagecontent.trim() && this.selectedChannel) {
       this.socketService.sendMessage(this.selectedChannel.name, this.messagecontent, this.username);
@@ -112,12 +111,12 @@ export class ChatComponent implements OnInit {
     }
   }
 
-
+  
   createGroup(): void {
     if (this.newGroupName.trim()) {
       const groupExists = this.groups.some(group => group.name.toLowerCase() === this.newGroupName.trim().toLowerCase());
       if (groupExists) {
-        alert('A group with this name already exists. Please choose a different name.');
+        alert('A group with this name already exists across all groups. Please choose a different name.');
         return;
       }
   
@@ -132,14 +131,15 @@ export class ChatComponent implements OnInit {
       this.newGroupName = ''; 
     }
   }
-  
-  
 
+  
   createChannel(): void {
     if (this.selectedGroup && this.newChannelName.trim()) {
-      const channelExists = this.selectedGroup.channels.some(channel => channel.name.toLowerCase() === this.newChannelName.trim().toLowerCase());
+      const channelExists = this.groups.some(group =>
+        group.channels.some(channel => channel.name.toLowerCase() === this.newChannelName.trim().toLowerCase())
+      );
       if (channelExists) {
-        alert('A channel with this name already exists in this group. Please choose a different name.');
+        alert('A channel with this name already exists across all groups. Please choose a different name.');
         return;
       }
   
@@ -153,7 +153,6 @@ export class ChatComponent implements OnInit {
       this.isCreatingChannel = false; 
     }
   }
-  
 
   addUserToChannel(): void {                             
     if (this.selectedChannel && this.userToAdd) {
@@ -187,7 +186,7 @@ export class ChatComponent implements OnInit {
       this.selectedChannel = null;
     }
   }
-  
+
   removeUserFromChannel(user: User): void {
     if (this.selectedChannel) {
       this.selectedChannel.users = this.selectedChannel.users.filter(u => u !== user);
