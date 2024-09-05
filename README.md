@@ -92,3 +92,67 @@ The Node.js server architecture is structured to handle various tasks, divided a
 ### Global Variables:
 - **`channelMessages`**: Stores channel-specific messages across the app.
 
+
+
+## Server-Side Routes
+
+### **`GET /`**
+- **Purpose**: Serves the main application or index page.
+- **Parameters**: None.
+- **Return Values**: HTML file that renders the main application page.
+
+### **`POST /sendMessage`**
+- **Purpose**: Handles the submission of new messages to a channel.
+- **Parameters**:
+  - `channelName` (string): The name of the channel where the message will be sent.
+  - `message` (string): The content of the message.
+  - `user` (string): The name of the user sending the message (optional).
+- **Return Values**:
+  - Result: The new message is sent to all users in the specified channel.
+
+### **`POST /joinChannel`**
+- **Purpose**: Allows a user to join a specific channel.
+- **Parameters**:
+  - `channelName` (string): The name of the channel to join.
+  - `user` (string): The name of the user joining the channel.
+- **Return Values**:
+  - Result: Sends the latest chat history to the newly joined user.
+
+### **`POST /deleteChannel`**
+- **Purpose**: Deletes a specific channel and its associated messages.
+- **Parameters**:
+  - `channelName` (string): The name of the channel to be deleted.
+- **Return Values**:
+  - Result: Notifies users that the channel has been deleted.
+
+## Socket.io Events
+
+### **`connection`**
+- **Purpose**: Initializes a new connection between the client and server.
+- **Parameters**: None.
+- **Return Values**:
+  - Event Handling: Establishes socket event listeners for the connected client.
+
+### **`joinChannel`**
+- **Purpose**: Handles a user joining a channel.
+- **Parameters**:
+  - `channelName` (string): The name of the channel the user is joining.
+  - `user` (string): The username of the user joining the channel.
+- **Return Values**:
+  - Event Handling: Joins the specified channel and sends chat history.
+
+### **`sendMessage`**
+- **Purpose**: Sends a message to a specific channel.
+- **Parameters**:
+  - `channelName` (string): The name of the channel where the message will be sent.
+  - `message` (string): The content of the message.
+  - `user` (string): The username of the sender (optional).
+- **Return Values**:
+  - Result: Sends the message to all users in the specified channel.
+
+### **`deleteChannel`**
+- **Purpose**: Deletes a channel and its associated messages.
+- **Parameters**:
+  - `channelName` (string): The name of the channel to be deleted.
+- **Return Values**:
+  - Result: Notifies users that the channel has been deleted.
