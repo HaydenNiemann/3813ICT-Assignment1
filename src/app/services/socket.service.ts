@@ -2,35 +2,35 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root'                                             // provide this service at root level    
 })
 export class SocketService {
-  private socket: Socket;
+  private socket: Socket;                                       // socket object 
 
   constructor() {
-    this.socket = io('http://localhost:3000'); 
+    this.socket = io('http://localhost:3000');                  // connect to the server
   }
 
-  joinChannel(channelName: string, name: string): void {
-    this.socket.emit('joinChannel', channelName);
+  joinChannel(channelName: string, name: string): void {        // join a channel
+    this.socket.emit('joinChannel', channelName);               // emit joinChannel event
   }
 
-  sendMessage(channelName: string, message: string, user: string | null): void {
-    this.socket.emit('sendMessage', { channelName, message, user });
+  sendMessage(channelName: string, message: string, user: string | null): void {    // send a message
+    this.socket.emit('sendMessage', { channelName, message, user });                // emit sendMessage event
   }
 
-  getMessages(next: (message: any) => void): void {
-    this.socket.off('newMessage'); 
-    this.socket.on('newMessage', (message) => next(message)); 
+  getMessages(next: (message: any) => void): void {             // get messages 
+    this.socket.off('newMessage');                              // remove previous event listener
+    this.socket.on('newMessage', (message) => next(message));   // listen for newMessage event
   }
 
-  getChatHistory(next: (history: any[]) => void): void {
-    this.socket.off('chatHistory'); 
-    this.socket.on('chatHistory', (history) => next(history)); 
+  getChatHistory(next: (history: any[]) => void): void {        // get chat history
+    this.socket.off('chatHistory');                             // remove previous event listener
+    this.socket.on('chatHistory', (history) => next(history));  // listen for chatHistory event
   }
 
-  deleteChannel(channelName: string): void {
-  this.socket.emit('deleteChannel', channelName);
+  deleteChannel(channelName: string): void {                    // delete a channel
+  this.socket.emit('deleteChannel', channelName);               // emit deleteChannel event
 }
 
 }

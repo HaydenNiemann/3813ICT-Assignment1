@@ -11,76 +11,76 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
-  newUsername: string = '';
-  newPassword: string = '';
-  loginErrorMessage: string = '';
-  registrationErrorMessage: string = '';
-  successMessage: string = '';
-  showRegistration: boolean = false;  
+  username: string = '';                          // username for login
+  password: string = '';                          // password for login   
+  newUsername: string = '';                       // username for registration  
+  newPassword: string = '';                       // password for registration  
+  loginErrorMessage: string = '';                 // error message for login
+  registrationErrorMessage: string = '';          // error message for registration
+  successMessage: string = '';                    // success message for registration   
+  showRegistration: boolean = false;              // flag to show/hide registration form 
 
-  users = [
-    { username: 'super', password: 'super', role: 'SuperAdmin' },
+  users = [                                  // list of users hardcoded for demo
+    { username: 'super', password: '123', role: 'SuperAdmin' }, 
     { username: 'admin', password: 'admin', role: 'GroupAdmin' },
     { username: 'user', password: 'user', role: 'User' }
   ];
 
   constructor(private router: Router) {
-    const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    if (storedUsers.length > 0) {
-      this.users = storedUsers;
+    const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');    // get users from local storage
+    if (storedUsers.length > 0) {                                             // if users exist, use them    
+      this.users = storedUsers;                                               // else use hardcoded users          
     }
   }
 
-  login() {
-    
-    if (!this.username.trim() || !this.password.trim()) {
-      this.loginErrorMessage = 'Please enter both username and password.';
+  login() {                                                                   // login function
+
+    if (!this.username.trim() || !this.password.trim()) {                     // check if username and password are entered     
+      this.loginErrorMessage = 'Please enter both username and password.';    // if not, show error message
       return;
     }
 
-    const user = this.users.find(
-      u => u.username === this.username && u.password === this.password
+    const user = this.users.find(                                           // find user in the list of users     
+      u => u.username === this.username && u.password === this.password     // based on username and password
     );
 
-    if (user) {
-      sessionStorage.setItem('currentUser', JSON.stringify({
-        username: user.username,
-        role: user.role
+    if (user) {                                                            // if user is found, navigate to chat page   
+      sessionStorage.setItem('currentUser', JSON.stringify({               // store user in session storage
+        username: user.username,                                           // for use in chat component
+        role: user.role                                                    // to show username and role              
       }));
-      this.router.navigate(['/chat']);
+      this.router.navigate(['/chat']);                                     // navigate to chat page   
     } else {
-      this.loginErrorMessage = 'Invalid credentials, please try again.';
-      this.registrationErrorMessage = ''; 
+      this.loginErrorMessage = 'Invalid credentials, please try again.';   // if user is not found, show error message
+      this.registrationErrorMessage = '';                                  // clear registration error message 
     }
   }
 
-  register() {
-    const existingUser = this.users.find(u => u.username === this.newUsername);
+  register() {                                                            // registration function      
+    const existingUser = this.users.find(u => u.username === this.newUsername); // check if username already exists
 
-    if (existingUser) {
-      this.registrationErrorMessage = 'Username already taken. Please choose a different one.';
-      this.loginErrorMessage = ''; 
+    if (existingUser) {                                                   // if username exists, show error message  
+      this.loginErrorMessage = '';                                        // clear login error message
+      this.registrationErrorMessage = 'Username already taken. Please choose a different one.'; //setting error message
     } else {
-      const newUser = { username: this.newUsername, password: this.newPassword, role: 'User' };
-      this.users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(this.users));
-      this.successMessage = 'Registration successful! You can now log in.';
-      this.registrationErrorMessage = '';
-      this.loginErrorMessage = '';
+      const newUser = { username: this.newUsername, password: this.newPassword, role: 'User' }; // create new user
+      this.users.push(newUser);                                           // add new user to the list of users        
+      localStorage.setItem('users', JSON.stringify(this.users));          // store updated list of users in local storage
+      this.successMessage = 'Registration successful! You can now log in.'; // show success message
+      this.registrationErrorMessage = '';                                 // clear registration error message        
+      this.loginErrorMessage = '';                                        // clear login error message
       
       
-      this.newUsername = '';
-      this.newPassword = '';
-      this.showRegistration = false;
+      this.newUsername = '';                                              // clear new username and password fields        
+      this.newPassword = '';                                              // after successful registration
+      this.showRegistration = false;                                      // hide registration form after successful registration
     }
   }
 
-  toggleRegistration() {
-    this.showRegistration = !this.showRegistration;
-    this.successMessage = '';
-    this.loginErrorMessage = '';
-    this.registrationErrorMessage = '';
+  toggleRegistration() {                                                // function to toggle between login and registration forms    
+    this.showRegistration = !this.showRegistration;                     // show registration form if it is hidden and vice versa    
+    this.successMessage = '';                                           // clear success message     
+    this.loginErrorMessage = '';                                        // clear login error message  
+    this.registrationErrorMessage = '';                                 // clear registration error message 
   }
 }
