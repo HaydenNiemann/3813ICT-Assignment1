@@ -1,48 +1,108 @@
-<div class="chat-container">
-  <h2>Welcome, {{ username }}</h2>
-
+<div class="chat-page">
+  <div class="button-group">
+    <button (click)="deleteProfile()" class="btn-delete-profile">Delete Profile</button>
+    <button (click)="logout()" class="logout-btn">Logout</button>
+  </div>
   
-  <form (ngSubmit)="sendMessage()" class="chat-form">
-    <div class="form-group">
-      <label for="messagecontent">New Message</label>
-      <input
-        type="text"
-        [(ngModel)]="messagecontent"
-        name="messagecontent"
-        id="messagecontent"
-        class="form-control"
-        required
-      />
+  <div class="sidebar">
+    <!--section for groupadmin or superadmin-->
+    <div *ngIf="userRole === 'GroupAdmin' || userRole === 'SuperAdmin'">
+      <h3>Group Administration</h3>
+
+      <!--create group-->
+      <div class="form-group">
+        <label for="newGroupName">New Group Name</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="newGroupName" id="newGroupName" class="form-control"/>
+          <button (click)="createGroup()" class="btn-create">Create Group</button>
+        </div>
+      </div>
+
+      <!--list of groups-->
+      <div *ngFor="let group of groups" class="group-item">
+        <div class="flex-space-between-center">
+          <span class="group-name">{{ group.name }}</span>
+          <div>
+            <button (click)="selectGroup(group); isCreatingChannel = true" class="create-btn">Create Channel</button>
+            <button (click)="removeGroup(group)" class="btn-remove">✖</button>
+          </div>
+        </div>
+
+        <!--always show list of channels-->
+        <ul class="channels-list mt-2">
+          <li *ngFor="let channel of group.channels" class="flex-between">
+            <span>- {{ channel.name }}</span>
+            <button (click)="selectChannel(channel)" class="btn btn-info btn-sm">Join Channel</button>
+            <button (click)="removeChannel(group, channel)" class="btn-remove">Delete</button>
+          </li>
+        </ul>
+
+        <!--channel creation form if group is selected-->
+        <div *ngIf="selectedGroup === group && isCreatingChannel" class="channel-management">
+          <div class="form-group">
+            <label for="newChannelName">New Channel Name</label>
+            <div class="input-group">
+              <input type="text" [(ngModel)]="newChannelName" id="newChannelName" class="form-control"/>
+              <button (click)="createChannel()" class="btn-create">Create Channel</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary">Send</button>
-  </form>
 
-  
-  <ul class="messages-list">
-    <li *ngFor="let message of messages" class="message-item">{{ message }}</li>
-  </ul>
-
-  
-  <div *ngIf="userRole === 'SuperAdmin'">
-    <h3>Super Admin Actions</h3>
-    <button class="btn btn-primary">Manage Users</button>
-    
+    <!--section for regular users-->
+    <div *ngIf="userRole === 'User'">
+      <h3>Your Channels</h3>
+      <ul class="channels-list mt-2">
+        <li *ngFor="let channel of userChannels" class="flex-between">
+          <span>- {{ channel.name }}</span>
+          <button (click)="selectChannel(channel)" class="btn btn-info btn-sm">Join Channel</button>
+        </li>
+      </ul>
+    </div>
   </div>
 
-  
-  <div *ngIf="userRole === 'GroupAdmin'">
-    <h3>Group Admin Actions</h3>
-    <button class="btn btn-primary">Create Group</button>
-   
+  <div class="chat-container">
+    <h2>Welcome, {{ username }}</h2>
+
+    <form (ngSubmit)="sendMessage()" class="chat-form">
+      <div class="form-group">
+        <label for="messagecontent">New Message</label>
+        <input type="text" [(ngModel)]="messagecontent" name="messagecontent" id="messagecontent" class="form-control" required/>
+      </div>
+      <button type="submit" class="submit-btn">Send</button>
+    </form>
+
+    <ul class="messages-list">
+      <li *ngFor="let message of messages" class="message-item">{{ message }}</li>
+    </ul>
   </div>
 
-  
-  <div *ngIf="userRole === 'User'">
-    <h3>User Actions</h3>
-    <button class="btn btn-primary">Join Channel</button>
-    
-  </div>
+  <div class="sidebar">
+    <h3>Users in {{ selectedChannel?.name || 'Channel' }}</h3>
+    <ul class="users-list">
+      <li *ngFor="let user of selectedChannel?.users" class="flex-space-between-center">
+          <span>{{ user.username }}</span>
+          <div *ngIf="userRole === 'GroupAdmin' || userRole === 'SuperAdmin'">
+              <button (click)="removeUserFromChannel(user)" class="btn-remove">Remove</button>
+              <button (click)="banUserFromChannel(user)" class="btn-remove">Ban</button>
+          </div>
+      </li>
+    </ul>
 
-  <!-- Logout Button -->
-  <button (click)="logout()" class="btn btn-danger mt-3">Logout</button>
+    <!--add user to channel-->
+    <div *ngIf="userRole === 'GroupAdmin' || userRole === 'SuperAdmin' && selectedChannel" class="add-user-btn">
+      <h4>Add User to Channel</h4>
+      <div class="form-group">
+        <label for="userToAdd">Select User</label>
+        <select id="userToAdd" [(ngModel)]="userToAdd" class="form-control">
+          <option *ngFor="let user of users" [value]="user.username">{{ user.username }}</option>
+        </select>
+        <button (click)="addUserToChannel()" class="add-user-btn">Add User</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+<!--working-->

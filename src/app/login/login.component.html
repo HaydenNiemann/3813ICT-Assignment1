@@ -1,15 +1,45 @@
 <div class="container">
-    <h2>Login</h2>
-    <form (ngSubmit)="login()">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" [(ngModel)]="username" name="username" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Login</button>
-    </form>
-  </div>
+  <h2 *ngIf="!showRegistration">Login</h2>
+  <h2 *ngIf="showRegistration">Register</h2>
+
+  <form *ngIf="!showRegistration" (ngSubmit)="login()">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" [(ngModel)]="username" name="username" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control" required>
+    </div>
+  </form>
+
+  <form *ngIf="showRegistration" (ngSubmit)="register()">
+    <div class="form-group">
+      <label for="newUsername">Username:</label>
+      <input type="text" id="newUsername" [(ngModel)]="newUsername" name="newUsername" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="newPassword">Password:</label>
+      <input type="password" id="newPassword" [(ngModel)]="newPassword" name="newPassword" class="form-control" required>
+    </div>
+  </form>
+
+  <button *ngIf="!showRegistration" (click)="login()" class="btn-submit">Login</button>
+  <button *ngIf="showRegistration" (click)="register()" class="btn-submit btn-success">Register</button>
+
+  <button (click)="toggleRegistration()" class="btn-submit btn-secondary mt-3">
+    {{ showRegistration ? 'Back to Login' : 'Register' }}
+  </button>
   
+  <div *ngIf="loginErrorMessage" class="alert alert-danger mt-2">
+    {{ loginErrorMessage }}
+  </div>
+
+  <div *ngIf="registrationErrorMessage" class="alert alert-danger mt-2">
+    {{ registrationErrorMessage }}
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success mt-2">
+    {{ successMessage }}
+  </div>
+</div>

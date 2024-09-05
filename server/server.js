@@ -1,21 +1,20 @@
-// server.js
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
-const sockets = require('./sockets'); 
-const app = express();
+const socketHandler = require('./sockets'); 
 
+const app = express();
 app.use(cors());
 
 const server = http.createServer(app);
 const io = require('socket.io')(server, {
   cors: {
-    origin: "http://localhost:4200",
+    origin: "http://localhost:4200", 
     methods: ["GET", "POST"]
   }
 });
 
-sockets.connect(io);
+socketHandler.connect(io);
 
 const PORT = 3000;
 server.listen(PORT, () => {

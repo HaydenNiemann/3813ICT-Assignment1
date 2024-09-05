@@ -11,11 +11,26 @@ export class SocketService {
     this.socket = io('http://localhost:3000'); 
   }
 
-  sendMessage(message: string): void {
-    this.socket.emit('message', message);
+  joinChannel(channelName: string, name: string): void {
+    this.socket.emit('joinChannel', channelName);
   }
 
-  getMessage(next: (message: string) => void): void {
-    this.socket.on('message', (message) => next(message));
+  sendMessage(channelName: string, message: string, user: string | null): void {
+    this.socket.emit('sendMessage', { channelName, message, user });
   }
+
+  getMessages(next: (message: any) => void): void {
+    this.socket.off('newMessage'); 
+    this.socket.on('newMessage', (message) => next(message)); 
+  }
+
+  getChatHistory(next: (history: any[]) => void): void {
+    this.socket.off('chatHistory'); 
+    this.socket.on('chatHistory', (history) => next(history)); 
+  }
+
+  deleteChannel(channelName: string): void {
+  this.socket.emit('deleteChannel', channelName);
+}
+
 }
